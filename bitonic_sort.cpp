@@ -62,7 +62,7 @@ namespace parallel
     // but number of threads is not a template, because overwise
     // impossible to draw a table (need constant value)
     template <class T> // <class T, bool dir = true, int thr_num = 8> 
-        void bitonic_sort(std::vector<T>& vec, int thr_num = 2, bool dir = true)
+        void bitonic_sort(std::vector<T>& vec, int thr_num = 8, bool dir = true)
         {
             // checking if size == 2^n
             size_t size = vec.size();
