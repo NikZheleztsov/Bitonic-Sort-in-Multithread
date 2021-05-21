@@ -138,7 +138,7 @@ namespace parallel
 
 void print_test_table ()
 {
-    std::cout << "  ";
+    std::cout << "    ";
     for (int i = 1; i < 10; i++) // num of elements in vec
         std::cout << std::setw(6) << "2^" << i;
     for (int i = 10; i < 21; i++)
@@ -146,16 +146,12 @@ void print_test_table ()
 
     std::cout << std::endl << std::endl;
 
-    for (int i = 2; i < 13; i++) // cpu has 12 threads
+    for (int i = 1; i < 6; i++) // cpu has 12 threads
     {
-        std::cout << std::setw(2) << i;
+        std::cout << std::setw(3) << "2^" << i;
         
         for (int j = 1; j < 21; j++)
         {
-            // different direcitions of sorting
-            bool dir;
-            (parallel::isEven(j)) ? (dir = true) : (dir = false);
-
             std::srand(100);
             size_t size = pow(2, j);
             std::vector<int> vec_1 (size);
@@ -163,7 +159,7 @@ void print_test_table ()
                 vec_1[i] = std::rand() % 1000;
 
             auto start_serial = std::chrono::steady_clock::now();
-            serial::bitonic_sort(vec_1, 0, vec_1.size(), dir);
+            serial::bitonic_sort(vec_1, 0, vec_1.size(), true);
             auto end_serial = std::chrono::steady_clock::now();
             auto serial = std::chrono::duration_cast<std::chrono::milliseconds>(end_serial - start_serial).count();
 
@@ -173,7 +169,7 @@ void print_test_table ()
                 vec_2[i] = std::rand() % 1000;
 
             auto start = std::chrono::steady_clock::now();
-            parallel::bitonic_sort<int> (vec_2, i, dir);
+            parallel::bitonic_sort<int> (vec_2, pow(2,i), true);
             auto end = std::chrono::steady_clock::now();
             auto parallel = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 
@@ -201,7 +197,7 @@ int main ()
 {
     // Вывод: 
     //  при большом количестве элементов в векторе многопоточность работает быстрее
-    //  2 потока являются оптимальными при размере вектора до 2^20
+    //  8 потоков являются оптимальными при размере вектора от 2^15 (см. скриншот)
     // print_test_table();
 
     std::srand(std::time(0));
